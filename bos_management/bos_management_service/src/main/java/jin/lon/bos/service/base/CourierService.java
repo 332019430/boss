@@ -2,6 +2,7 @@ package jin.lon.bos.service.base;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 
 import jin.lon.bos.bean.base.Courier;
 
@@ -18,6 +19,9 @@ public interface CourierService {
     Page<Courier> findAll(Pageable pageable);
 
     void delete(String id);
- 
+
+    Page<Courier> findAll(Specification<Courier> specification, Pageable pageable);
+    
+    
 }
   
