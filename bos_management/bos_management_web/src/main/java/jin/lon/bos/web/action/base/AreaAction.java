@@ -102,19 +102,22 @@ public class AreaAction extends CommonAction<Area> {
 
     @Action("areaAction_pageQuery")
     public String pageQuery() throws IOException {
-        /*PageRequest pageRequest = new PageRequest(page - 1, rows);
+        PageRequest pageRequest = new PageRequest(page - 1, rows);
         Page<Area> page = areaService.pageQuery(pageRequest);
-        List<Area> list = page.getContent();
-        long total = page.getTotalElements();
-        Map<String, Object> map = new HashMap<>();
-        map.put("rows", list);
-        map.put("total", total);
+        
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.setExcludes(new String[] {"subareas"});
-        String json = JSONObject.fromObject(map, jsonConfig).toString();
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(json);*/
-        return NONE;
+        
+        return page2json(page, jsonConfig);
     }
+
+
+
+
+
+
+
+
+
+    
 }

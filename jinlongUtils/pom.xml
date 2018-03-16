@@ -5,8 +5,6 @@
     <artifactId>common_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>jin.lon</groupId>
   <artifactId>jinlongUtils</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
   <description>工具包</description>
 </project>

@@ -25,6 +25,7 @@ import com.opensymphony.xwork2.ModelDriven;
 
 import jin.lon.bos.bean.base.Standard;
 import jin.lon.bos.service.base.StandardService;
+import jin.lon.bos.web.action.CommonAction;
 import net.sf.json.JSONArray;
 import net.sf.json.JSONObject;
 
@@ -39,16 +40,17 @@ import net.sf.json.JSONObject;
 @ParentPackage("struts-default") // 等价于以前struts.xml中<package>节点的extends属性
 @Scope("prototype") // 等价于以前applicationContext.xml中<bean>节点的scope属性
 @Controller // 代表本类是一个控制器,即web层
-public class StandardAction extends ActionSupport implements ModelDriven<Standard> {
+public class StandardAction extends CommonAction<Standard> {
     private static final long serialVersionUID = 2L;
-    private Standard standard = new Standard();
+   
     @Autowired
     private StandardService service;
-
+    
+    /*private Standard standard = new Standard();
     @Override
     public Standard getModel() {
         return standard;
-    }
+    }*/
 
     // 保存派送标准
     // Action中的value等价于以前struts.xml中<action>节点的name
@@ -57,11 +59,11 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
     @Action(value = "standardAction_save", results = {
             @Result(name = "success", location = "/pages/base/standard.html", type = "redirect")})
     public String save() {
-        service.save(standard);
+        service.save(model);
         return SUCCESS;
     }
 
-    private int page;
+    /*private int page;
 
     public void setPage(int page) {
         this.page = page;
@@ -71,14 +73,14 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
 
     public void setRows(int rows) {
         this.rows = rows;
-    }
+    }*/
 
     @Action(value = "standardAction_pageQuery")
     public String pageQuery() throws IOException {
         Pageable pageable = new PageRequest(page-1, rows);
         Page<Standard> page=service.findByPage(pageable);
-        
-        long total = page.getTotalElements();
+        return page2json(page, null);
+        /*long total = page.getTotalElements();
         List<Standard> list = page.getContent();
         
         Map<String, Object> map = new HashMap<>();
@@ -90,7 +92,7 @@ public class StandardAction extends ActionSupport implements ModelDriven<Standar
         HttpServletResponse response = ServletActionContext.getResponse();
         response.setContentType("application/json;charset=UTF-8");
         response.getWriter().write(json);
-        return NONE;
+        return NONE;*/
     }
     
     @Action(value = "standard_findAll")

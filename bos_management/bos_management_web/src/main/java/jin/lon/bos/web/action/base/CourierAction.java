@@ -83,10 +83,10 @@ public class CourierAction extends CommonAction<Courier> {
 
     @Action(value = "courier_pageQuery")
     public String pageQuery() throws IOException {
-        String courierNum = model.getCourierNum();
-        String type = model.getType();
-        String company = model.getCompany();
-        Standard standard = model.getStandard();
+        final String courierNum = model.getCourierNum();
+        final String type = model.getType();
+        final String company = model.getCompany();
+        final Standard standard = model.getStandard();
         Specification<Courier> specification = new Specification<Courier>() {
 
             @Override
@@ -124,19 +124,10 @@ public class CourierAction extends CommonAction<Courier> {
         // Page<Courier> page = service.findAll(pageable);
 
         Page<Courier> page = service.findAll(specification, pageable);
-        long total = page.getTotalElements();
-        List<Courier> list = page.getContent();
-        Map<String, Object> map = new HashMap<>();
-        map.put("total", total);
-        map.put("rows", list);
-
-        JsonConfig config = new JsonConfig();
-        config.setExcludes(new String[] {"fixedAreas", "takeTime"});
-        String json = JSONObject.fromObject(map, config).toString();
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(json);
-        return NONE;
+        
+        JsonConfig jsonConfig = new JsonConfig();
+        jsonConfig.setExcludes(new String[] {"fixedAreas", "takeTime"});
+        return page2json(page, jsonConfig);
     }
 
     private String ids;
