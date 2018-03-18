@@ -2,16 +2,12 @@
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>jin.lon</groupId>
-    <artifactId>bos_management</artifactId>
+    <artifactId>common_parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <artifactId>bos_management_service</artifactId>
-  <description>后台系统业务处理层</description>
-  <dependencies>
-  	<dependency>
-  		<groupId>jin.lon</groupId>
-  		<artifactId>bos_management_dao</artifactId>
-  		<version>0.0.1-SNAPSHOT</version>
-  	</dependency>
-  </dependencies>
+  <groupId>jin.lon</groupId>
+  <artifactId>crm</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <description>客户关系管理系统</description>
 </project>

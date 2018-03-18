@@ -232,10 +232,10 @@
 	}
 </script>
 <script type="text/javascript">
-	function submitData() {
-		
+	function submitData01() {
+		/* 不会校验  */
 		if ($("#addCourier").form("validate")) {
-			alert("提示")
+
 			$("#addCourier").submit();
 		}
 	}
@@ -252,7 +252,7 @@
 		<div region="north" style="height: 31px; overflow: hidden;"
 			split="false" border="false">
 			<div class="datagrid-toolbar">
-				<a onclick="submitData()" id="save" icon="icon-save"
+				<a onclick="submitData01()" id="save" icon="icon-save"
 					class="easyui-linkbutton" plain="true">保存</a>
 			</div>
 		</div>

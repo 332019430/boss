@@ -2,6 +2,7 @@ package jin.lon.bos.bean.base;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -16,6 +17,7 @@ public class SubArea {
 
     @Id
     @Column(name = "C_ID")
+    @GeneratedValue
     private Long id;
     @Column(name = "C_START_NUM")
     private String startNum; // 起始号
@@ -27,10 +29,12 @@ public class SubArea {
     private String keyWords; // 关键字
     @Column(name = "C_ASSIST_KEY_WORDS")
     private String assistKeyWords; // 辅助关键字
-
+    
+    
     @ManyToOne
     @JoinColumn(name = "C_AREA_ID")
     private Area area; // 区域
+    
     @ManyToOne
     @JoinColumn(name = "C_FIXEDAREA_ID")
     private FixedArea fixedArea; // 定区
@@ -99,4 +103,11 @@ public class SubArea {
         this.fixedArea = fixedArea;
     }
 
+    @Override
+    public String toString() {
+        return "SubArea [id=" + id + ", startNum=" + startNum + ", endNum=" + endNum + ", single="
+                + single + ", keyWords=" + keyWords + ", assistKeyWords=" + assistKeyWords
+                + ", area=" + area + ", fixedArea=" + fixedArea + "]";
+    }
+    
 }

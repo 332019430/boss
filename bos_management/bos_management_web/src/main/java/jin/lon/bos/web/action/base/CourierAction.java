@@ -49,15 +49,19 @@ import net.sf.json.JsonConfig;
 @Scope("prototype")
 public class CourierAction extends CommonAction<Courier> {
 
-    /*private Courier model;
+    /*
+     * private Courier model;
+     * 
+     * @Override public Courier getModel() { if (model == null) { model = new Courier(); } return
+     * model; }
+     */
 
-    @Override
-    public Courier getModel() {
-        if (model == null) {
-            model = new Courier();
-        }
-        return model;
-    }*/
+    public CourierAction( ) {
+          
+        super(Courier.class);  
+        // TODO Auto-generated constructor stub  
+        
+    }
 
     @Autowired
     private CourierService service;
@@ -65,33 +69,35 @@ public class CourierAction extends CommonAction<Courier> {
     @Action(value = "courier_save", results = {
             @Result(name = "success", location = "pages/base/courier.html", type = "redirect")})
     public String save() {
-        service.save(model);
+        service.save(getModel());
         return SUCCESS;
     }
 
-    /*private int page;
-
-    public void setPage(int page) {
-        this.page = page;
-    }
-
-    private int rows;
-
-    public void setRows(int rows) {
-        this.rows = rows;
-    }*/
+    /*
+     * private int page;
+     * 
+     * public void setPage(int page) { this.page = page; }
+     * 
+     * private int rows;
+     * 
+     * public void setRows(int rows) { this.rows = rows; }
+     */
 
     @Action(value = "courier_pageQuery")
     public String pageQuery() throws IOException {
-        final String courierNum = model.getCourierNum();
-        final String type = model.getType();
-        final String company = model.getCompany();
-        final Standard standard = model.getStandard();
         Specification<Courier> specification = new Specification<Courier>() {
 
             @Override
             public Predicate toPredicate(Root<Courier> root, CriteriaQuery<?> query,
                     CriteriaBuilder cb) {
+                if (model == null) {
+                    return null;
+                }
+                final String courierNum = model.getCourierNum();
+                final String type = model.getType();
+                final String company = model.getCompany();
+                final Standard standard = model.getStandard();
+
                 List<Predicate> list = new ArrayList<Predicate>();
                 if (StringUtils.isNotEmpty(courierNum)) {
                     Predicate p1 = cb.equal(root.get("courierNum").as(String.class), courierNum);
@@ -105,15 +111,15 @@ public class CourierAction extends CommonAction<Courier> {
                     Predicate p3 = cb.like(root.get("company").as(String.class), company);
                     list.add(p3);
                 }
-                if (standard!=null&& StringUtils.isNotEmpty(standard.getName())) {
+                if (standard != null && StringUtils.isNotEmpty(standard.getName())) {
                     Join<Object, Object> join = root.join("standard");
                     Predicate p4 = cb.equal(join.get("name").as(String.class), standard.getName());
                     list.add(p4);
                 }
-                if (list.size()==0) {
+                if (list.size() == 0) {
                     return null;
                 }
-                Predicate[] arr=new Predicate[list.size()];
+                Predicate[] arr = new Predicate[list.size()];
                 list.toArray(arr);
                 return cb.and(arr);
             }
@@ -124,10 +130,11 @@ public class CourierAction extends CommonAction<Courier> {
         // Page<Courier> page = service.findAll(pageable);
 
         Page<Courier> page = service.findAll(specification, pageable);
-        
+
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.setExcludes(new String[] {"fixedAreas", "takeTime"});
-        return page2json(page, jsonConfig);
+        page2json(page, jsonConfig);
+        return NONE;
     }
 
     private String ids;

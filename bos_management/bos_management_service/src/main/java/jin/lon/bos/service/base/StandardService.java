@@ -16,7 +16,7 @@ import jin.lon.bos.bean.base.Standard;
 public interface StandardService {
      void save(Standard standard);
 
-    Page<Standard> findByPage(Pageable pageable);
+     Page<Standard> findByPage(Pageable pageable);
 
    
 

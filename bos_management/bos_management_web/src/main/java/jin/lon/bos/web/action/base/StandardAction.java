@@ -41,6 +41,13 @@ import net.sf.json.JSONObject;
 @Scope("prototype") // 等价于以前applicationContext.xml中<bean>节点的scope属性
 @Controller // 代表本类是一个控制器,即web层
 public class StandardAction extends CommonAction<Standard> {
+    public StandardAction() {
+          
+        super(Standard.class);  
+        // TODO Auto-generated constructor stub  
+        
+    }
+
     private static final long serialVersionUID = 2L;
    
     @Autowired
@@ -79,7 +86,8 @@ public class StandardAction extends CommonAction<Standard> {
     public String pageQuery() throws IOException {
         Pageable pageable = new PageRequest(page-1, rows);
         Page<Standard> page=service.findByPage(pageable);
-        return page2json(page, null);
+        page2json(page, null);
+        return NONE;
         /*long total = page.getTotalElements();
         List<Standard> list = page.getContent();
         
@@ -99,11 +107,8 @@ public class StandardAction extends CommonAction<Standard> {
     public String findAll() throws IOException {
         
         Page<Standard> page=service.findByPage(null);
-        String json = JSONArray.fromObject(page.getContent()).toString();
-        
-        HttpServletResponse response = ServletActionContext.getResponse();
-        response.setContentType("application/json;charset=UTF-8");
-        response.getWriter().write(json);
+        List<Standard> list = page.getContent();
+        list2json(list, null);
         return NONE;
     }
 }
