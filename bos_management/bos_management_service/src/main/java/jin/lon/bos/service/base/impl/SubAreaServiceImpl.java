@@ -1,5 +1,6 @@
 package jin.lon.bos.service.base.impl;
 
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -7,15 +8,17 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import jin.lon.bos.bean.base.FixedArea;
 import jin.lon.bos.bean.base.SubArea;
+import jin.lon.bos.dao.base.FixedAreaDao;
 import jin.lon.bos.dao.base.SubAreaRepository;
 import jin.lon.bos.service.base.SubAreaService;
 
-/**  
- * ClassName:SubAreaServiceImpl <br/>  
- * Function:  <br/>  
- * Date:     2018年3月18日 下午12:17:20 <br/>
- * Author:   郑云龙 
+/**
+ * ClassName:SubAreaServiceImpl <br/>
+ * Function: <br/>
+ * Date: 2018年3月18日 下午12:17:20 <br/>
+ * Author: 郑云龙
  */
 @Transactional
 @Service
@@ -24,17 +27,60 @@ public class SubAreaServiceImpl implements SubAreaService {
     @Autowired
     private SubAreaRepository subAreaRepository;
 
+    @Autowired
+    private FixedAreaDao fixedAreaDao;
+
     @Override
     public void save(SubArea model) {
         subAreaRepository.save(model);
     }
 
     @Override
-    public Page<SubArea> findAll(Pageable pageRequest) {
-          
-        // TODO Auto-generated method stub  
+    public Page<SubArea> pageQuery(Pageable pageRequest) {
+
+        // TODO Auto-generated method stub
         return subAreaRepository.findAll(pageRequest);
     }
 
+    @Override
+    public List<SubArea> findFixedAreaIsNull() {
+
+        // TODO Auto-generated method stub
+        return subAreaRepository.findByFixedAreaIsNull();
+    }
+
+    @Override
+    public List<SubArea> findFixedAreaIsNotNull() {
+
+        // TODO Auto-generated method stub
+        return subAreaRepository.findByFixedAreaIsNotNull();
+    }
+
+    @Override
+    public void sub_Arae2s2FixedArea(Long id, Long[] sub_Arae2Ids) {
+
+        List<SubArea> list = subAreaRepository.findAll();
+        for (SubArea subArea : list) {
+            subArea.setFixedArea(null);
+        }
+        if (id != null) {
+            FixedArea fixedArea = fixedAreaDao.findOne(id);
+            
+            for (Long long1 : sub_Arae2Ids) {
+                SubArea subArea = subAreaRepository.findOne(long1);
+                subArea.setFixedArea(fixedArea);
+            }
+        }
+
+    }
+
+    @Override
+    public void sub_AreaSetFixedAreaNull() {
+        List<SubArea> list = subAreaRepository.findAll();
+        for (SubArea subArea : list) {
+            subArea.setFixedArea(null);
+        }
+        
+    }
+
 }
-  

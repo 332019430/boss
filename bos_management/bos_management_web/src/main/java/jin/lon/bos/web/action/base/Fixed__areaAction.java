@@ -67,7 +67,7 @@ public class Fixed__areaAction extends CommonAction<FixedArea> {
     @Action(value = "fixedAreaAction_findCustomersUnAssociated")
     public String fixedAreaAction_findCustomersUnAssociated() throws IOException {
         List<Customer> list = (List<Customer>) WebClient
-                .create("http://localhost:8080/crm/webService/customerService/findByfixedAreaIdIsNull")
+                .create("http://localhost:8282/crm/webService/customerService/findByfixedAreaIdIsNull")
                 .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 .getCollection(Customer.class);
         list2json(list, null);
@@ -77,7 +77,7 @@ public class Fixed__areaAction extends CommonAction<FixedArea> {
     @Action(value = "fixedAreaAction_findCustomersAssociated")
     public String fixedAreaAction_findCustomersAssociated() throws IOException {
         List<Customer> list = (List<Customer>) WebClient
-                .create("http://localhost:8080/crm/webService/customerService/findByfixedAreaIdIsNotNull")
+                .create("http://localhost:8282/crm/webService/customerService/findByfixedAreaIdIsNotNull")
                 .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON)
                 .getCollection(Customer.class);
         list2json(list, null);
@@ -93,11 +93,38 @@ public class Fixed__areaAction extends CommonAction<FixedArea> {
     @Action(value = "fixedAreaAction_assignCustomers2FixedArea", results = {
             @Result(name = "success", location = "/pages/base/fixed_area.html", type = "redirect")})
     public String fixedAreaAction_assignCustomers2FixedArea() throws IOException {
-        WebClient
-                .create("http://localhost:8080/crm/webService/customerService/assignCustomers2FixedArea")
-                .query("fixedAreaId", model.getId()).query("customerIds", customerIds)
-                .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).put(null);
+        if (customerIds != null) {
+            WebClient
+                    .create("http://localhost:8282/crm/webService/customerService/assignCustomers2FixedArea")
+                    .query("fixedAreaId", model.getId()).query("customerIds", customerIds)
+                    .type(MediaType.APPLICATION_JSON).accept(MediaType.APPLICATION_JSON).put(null);
+        } else {
+            WebClient
+                    .create("http://localhost:8080/crm/webService/customerService/assignCustomers2null")
+                    .query("fixedAreaId", model.getId()).type(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON).put(null);
+        }
 
+        return SUCCESS;
+    }
+
+    private Long courierId;
+
+    public void setCourierId(Long courierId) {
+        this.courierId = courierId;
+    }
+
+    private Long takeTimeId;
+
+    public void setTakeTimeId(Long takeTimeId) {
+        this.takeTimeId = takeTimeId;
+    }
+
+    @Action(value = "fixedAreaAction_associationCourierToFixedArea", results = {
+            @Result(name = "success", location = "/pages/base/fixed_area.html", type = "redirect")})
+    public String fixedAreaAction_associationCourierToFixedArea() {
+        service.fixedAreaAction_associationCourierToFixedAreaAddTime(getModel().getId(), courierId,
+                takeTimeId);
         return SUCCESS;
     }
 }

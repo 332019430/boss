@@ -150,5 +150,16 @@ public class CourierAction extends CommonAction<Courier> {
         service.delete(ids);
         return SUCCESS;
     }
+    
+    @Action(value = "courierAction_listajax")
+    public String courierAction_listajax() throws IOException{
+        
+       List<Courier> list= service.findByDeltagIsNotNull();
+        System.out.println("list:"+list);
+        JsonConfig jsonConfig=new JsonConfig();  
+        jsonConfig.setExcludes(new String[]{"fixedAreas"});
+        list2json(list, jsonConfig);
+        return NONE;
+    }
 
 }

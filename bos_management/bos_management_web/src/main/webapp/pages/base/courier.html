@@ -33,8 +33,11 @@
 		var result = $("#grid").datagrid("getSelections");
 		if (result.length == 1) {
 			$('#addWindow').window("open");
+			$("#hiddenlong")
+			.append(
+					"<input type='hidden' name='id'  class='easyui-validatebox' required='true' />")
 			$("#addWindow").form("load", result[0]);
-
+			
 			$('#cbb').combobox('setValue', result[0].standard.id);
 		} else {
 			$.messager.alert("提示", "请值至少选择一条数据", "info");
@@ -233,11 +236,15 @@
 </script>
 <script type="text/javascript">
 	function submitData01() {
-		/* 不会校验  */
-		if ($("#addCourier").form("validate")) {
+		$("#save").click(function() {
+			/* 不会校验  */
+			if ($("#addCourier").form("validate")) {
 
-			$("#addCourier").submit();
-		}
+				$("#addCourier").submit();
+			} else {
+				console.log("validate failed")
+			}
+		})
 	}
 </script>
 </head>
@@ -263,13 +270,12 @@
 				action="../../courier_save.action">
 				<table class="table-edit" width="80%" align="center">
 					<tr class="title">
-						<td colspan="4">收派员信息</td>
-						<input type="hidden" name="id" value="" class="easyui-validatebox"
-							required="true" />
+						<td colspan="4" id="hiddenlong">收派员信息</td>
+						
 					</tr>
 					<tr>
 						<td>快递员工号</td>
-						<td>
+						<td >
 							<input type="text" name="courierNum" class="easyui-validatebox"
 								required="true" />
 						</td>
@@ -328,6 +334,7 @@
 							<input type="text" name="vehicleNum" class="easyui-validatebox"
 								required="true" />
 						</td>
+						
 					</tr>
 				</table>
 			</form>

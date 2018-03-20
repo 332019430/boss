@@ -49,7 +49,7 @@
 	}
 	function doAssociations() {
 		var rows = $("#grid").datagrid("getSelections")
-		
+
 		// 如果用户选择多行数据,给出警告
 		if (rows.length != 1) {
 			$.messager.alert("提示信息", "请选择一行数据 !", "warning")
@@ -68,7 +68,9 @@
 				}
 			}, "json");
 
-			$.post(url2,{"id":rows[0].id},function(data) {
+			$.post(url2, {
+				"id" : rows[0].id
+			}, function(data) {
 				for (var i = 0; i < data.length; i++) {
 					$("#associationSelect").append(
 							"<option value='"+data[i].id+"'>"
@@ -80,53 +82,94 @@
 	}
 
 	//工具栏
-	var toolbar = [ {
-		id : 'button-search',
-		text : '查询',
-		iconCls : 'icon-search',
-		handler : doSearch
-	}, {
-		id : 'button-add',
-		text : '增加',
-		iconCls : 'icon-add',
-		handler : doAdd
-	}, {
-		id : 'button-edit',
-		text : '修改',
-		iconCls : 'icon-edit',
-		handler : doEdit
-	}, {
-		id : 'button-delete',
-		text : '删除',
-		iconCls : 'icon-cancel',
-		handler : doDelete
-	}, {
-		id : 'button-association',
-		text : '关联客户',
-		iconCls : 'icon-sum',
-		handler : doAssociations
-	}, {
-		id : 'button-association-courier',
-		text : '关联快递员',
-		iconCls : 'icon-sum',
-		handler : function() {
-			// 判断是否已经选中了一个定区，弹出关联快递员窗口 
-			var rows = $("#grid").datagrid('getSelections');
-			if (rows.length == 1) {
-				// 只选择了一个定区
-				// 弹出定区关联快递员 窗口 
-				$("#courierWindow").window('open');
-			} else {
-				// 没有选中定区，或者选择 了多个定区
-				$.messager.alert("警告", "关联快递员,只能（必须）选择一个定区", "warning");
-			}
-		}
-	}, {
-		id : 'button-association2',
-		text : '关联分区',
-		iconCls : 'icon-sum',
-		handler : doAssociations
-	} ];
+	var toolbar = [
+			{
+				id : 'button-search',
+				text : '查询',
+				iconCls : 'icon-search',
+				handler : doSearch
+			},
+			{
+				id : 'button-add',
+				text : '增加',
+				iconCls : 'icon-add',
+				handler : doAdd
+			},
+			{
+				id : 'button-edit',
+				text : '修改',
+				iconCls : 'icon-edit',
+				handler : doEdit
+			},
+			{
+				id : 'button-delete',
+				text : '删除',
+				iconCls : 'icon-cancel',
+				handler : doDelete
+			},
+			{
+				id : 'button-association',
+				text : '关联客户',
+				iconCls : 'icon-sum',
+				handler : doAssociations
+			},
+			{
+				id : 'button-association-courier',
+				text : '关联快递员',
+				iconCls : 'icon-sum',
+				handler : function() {
+					// 判断是否已经选中了一个定区，弹出关联快递员窗口 
+					var rows = $("#grid").datagrid('getSelections');
+					if (rows.length == 1) {
+						// 只选择了一个定区
+						// 弹出定区关联快递员 窗口 
+						$("#courierWindow").window('open');
+					} else {
+						// 没有选中定区，或者选择 了多个定区
+						$.messager.alert("警告", "关联快递员,只能（必须）选择一个定区", "warning");
+					}
+				}
+			},
+			{
+				id : 'button-association2',
+				text : '关联分区',
+				iconCls : 'icon-sum',
+				handler : function sub_Area2fixedArea() {
+					var rows = $("#grid").datagrid("getSelections")
+
+					// 如果用户选择多行数据,给出警告
+					if (rows.length != 1) {
+						$.messager.alert("提示信息", "请选择一行数据进行分区关联 !", "warning")
+					} else {
+						$("#noassociationSelect2").html("")
+						$("#associationSelect2").html("")
+						$("#sub_AraeWindow").window('open');
+						var url1 = "../../fixedAreaAction_findSub_AraesUnAssociated.action"
+						var url2 = "../../fixedAreaAction_findSub_AraesAssociated.action"
+						$.post(url1, function(data) {
+							for (var i = 0; i < data.length; i++) {
+								$("#noassociationSelect2").append(
+										"<option value='"+data[i].id+"'>"
+												+ data[i].keyWords + "["
+												+ data[i].assistKeyWords + "]"
+												+ "</option>")
+							}
+						}, "json");
+
+						$.post(url2, {
+							"id" : rows[0].id
+						}, function(data) {
+							for (var i = 0; i < data.length; i++) {
+								$("#associationSelect2").append(
+										"<option value='"+data[i].id+"'>"
+												+ data[i].keyWords + "["
+												+ data[i].assistKeyWords + "]"
+												+ "</option>")
+							}
+						}, "json");
+					}
+				}
+			} ];
 	// 定义列
 	var columns = [ [ {
 		field : 'id',
@@ -438,7 +481,7 @@
 			<script type="text/javascript">
 				function customerCommitForm() {
 					$("#associationSelect option").attr("selected", "selected")
-					var row=$("#grid").datagrid("getSelections");
+					var row = $("#grid").datagrid("getSelections");
 					$("#customerFixedAreaId").val(row[0].id)
 					$("#customerForm").submit();
 				}
@@ -496,7 +539,7 @@
 							<!-- 存放定区编号 -->
 							<input type="hidden" name="id" id="courierFixedAreaId" />
 							<input
-								data-options="ditable:false, url:'../../',valueField:'id',textField:'name'"
+								data-options="ditable:false, url:'../../courierAction_listajax.action',valueField:'id',textField:'name'"
 								type="text" name="courierId" class="easyui-combobox"
 								required="true" />
 						</td>
@@ -514,10 +557,85 @@
 					</tr>
 					<tr>
 						<td colspan="3">
-							<a id="associationCourierBtn" href="#" class="easyui-linkbutton"
-								data-options="iconCls:'icon-save'">关联快递员</a>
+							<a onclick="associationCourier()" id="associationCourierBtn"
+								href="#" class="easyui-linkbutton"
+								data-options="iconCls:'icon-save' ">关联快递员</a>
+						</td>
+						<script type="text/javascript">
+							function associationCourier() {
+								var rows = $("#grid").datagrid("getSelections");
+
+								$("#courierFixedAreaId").val(rows[0].id)
+
+								$("#courierForm").submit();
+							}
+						</script>
+					</tr>
+				</table>
+			</form>
+		</div>
+	</div>
+
+	<!-- 关联分区窗口 -->
+	<script type="text/javascript">
+		
+	</script>
+
+	<!-- 关联分区窗口 -->
+	<div modal="true" class="easyui-window" title="关联分区窗口"
+		id="sub_AraeWindow" collapsible="false" closed="true"
+		minimizable="false" maximizable="false"
+		style="top: 20px; left: 200px; width: 400px; height: 300px;">
+		<div style="overflow: auto; padding: 5px;" border="false">
+			<script type="text/javascript">
+				function sub_Arae2CommitForm() {
+					$("#associationSelect2 option")
+							.attr("selected", "selected")
+					var row = $("#grid").datagrid("getSelections");
+					$("#sub_Arae2FixedAreaId").val(row[0].id)
+					$("#sub_Arae2Form").submit();
+				}
+			</script>
+			<form id="sub_Arae2Form"
+				action="../../fixedAreaAction_assignsub_Arae2s2FixedArea.action"
+				method="post">
+				<table class="table-edit" width="80%" align="center">
+					<tr class="title">
+						<td colspan="3">关联分区</td>
+					</tr>
+					<tr>
+						<td>
+							<input type="hidden" name="id" id="sub_Arae2FixedAreaId" />
+							<select id="noassociationSelect2" multiple="multiple" size="10"></select>
+						</td>
+						<td>
+							<input type="button" value="》》" id="toRight" onclick="l2r2()">
+							<br />
+							<input type="button" value="《《" id="toLeft" onclick="r2l2()">
+						</td>
+						
+						<td>
+							<select id="associationSelect2" name="sub_Arae2Ids"
+								multiple="multiple" size="10"></select>
 						</td>
 					</tr>
+					<tr>
+						<td colspan="3">
+							<a id="associationBtn2" href="#" class="easyui-linkbutton"
+								data-options="iconCls:'icon-save'"
+								onclick="sub_Arae2CommitForm()">关联分区</a>
+						</td>
+					</tr>
+					<script type="text/javascript">
+							function l2r2(){
+								$("#associationSelect2").append(
+										$("#noassociationSelect2 option:selected"))
+							}
+							function r2l2(){
+								$("#noassociationSelect2").append(
+										$("#associationSelect2 option:selected"))
+							}
+						</script>
 				</table>
 			</form>
 		</div>

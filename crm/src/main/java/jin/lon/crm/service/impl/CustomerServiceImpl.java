@@ -47,4 +47,22 @@ public class CustomerServiceImpl implements CustomerService {
             }
         }
     }
+
+    @Override
+    public void assignCustomers2null(String fixedAreaId) {
+          
+        if (fixedAreaId.length()>0) {
+            dao.unbindCustomerByFixedArea(fixedAreaId);
+        }
+        
+    }
+
+    @Override
+    public void save(Customer customer) {
+          
+        dao.save(customer);
+        
+    }
+
+    
 }

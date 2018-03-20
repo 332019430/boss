@@ -14,6 +14,7 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Controller;
 
+import jin.lon.bos.bean.base.FixedArea;
 import jin.lon.bos.bean.base.SubArea;
 import jin.lon.bos.service.base.SubAreaService;
 import jin.lon.bos.web.action.CommonAction;
@@ -49,13 +50,48 @@ public class SubAreaAction extends CommonAction<SubArea> {
     @Action(value = "sub_area_pageQuery")
     public String sub_areaFindAll() throws IOException {
         Pageable pageable = new PageRequest(page-1, rows);
-        Page<SubArea> page=subAreaService.findAll(pageable);
+        Page<SubArea> page=subAreaService.pageQuery(pageable);
         JsonConfig jsonConfig = new JsonConfig();
         jsonConfig.setExcludes(new String[]{"subareas"});
         page2json(page, jsonConfig);
         
         
         return NONE;
+    }
+    
+    @Action("fixedAreaAction_findSub_AraesUnAssociated")
+    public String fixedAreaAction_findSub_AraesUnAssociated() throws IOException{
+        List<SubArea> list=subAreaService.findFixedAreaIsNull();
+        JsonConfig jsonConfig = new JsonConfig();
+        
+        jsonConfig.setExcludes(new String[]{"subareas","couriers"});
+        list2json(list, jsonConfig);
+        return NONE;
+    }
+    
+    @Action("fixedAreaAction_findSub_AraesAssociated")
+    public String fixedAreaAction_findSub_AraesAssociated() throws IOException{
+        List<SubArea> list=subAreaService.findFixedAreaIsNotNull();
+        JsonConfig jsonConfig = new JsonConfig();
+        
+        jsonConfig.setExcludes(new String[]{"subareas","couriers"});
+        list2json(list, jsonConfig);
+        return NONE;
+    }
+    
+    private Long[] sub_Arae2Ids;
+    public void setSub_Arae2Ids(Long[] sub_Arae2Ids) {
+        this.sub_Arae2Ids = sub_Arae2Ids;
+    }
+    @Action(value="fixedAreaAction_assignsub_Arae2s2FixedArea",
+            results={@Result(name="success",location="/pages/base/fixed_area.html",type="redirect")})
+    public String fixedAreaAction_assignsub_Arae2s2FixedArea(){
+        if (sub_Arae2Ids!=null &&sub_Arae2Ids.length>0) {
+            subAreaService.sub_Arae2s2FixedArea(model.getId(),sub_Arae2Ids);
+        }else{
+            subAreaService.sub_AreaSetFixedAreaNull();
+        }
+        return SUCCESS;
     }
 
 }

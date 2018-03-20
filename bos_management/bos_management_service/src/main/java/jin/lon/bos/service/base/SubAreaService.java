@@ -1,5 +1,7 @@
 package jin.lon.bos.service.base;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -16,7 +18,17 @@ public interface SubAreaService {
 
     void save(SubArea model);
 
-    Page<SubArea> findAll(Pageable pageRequest);
+    Page<SubArea> pageQuery(Pageable pageRequest);
+
+    List<SubArea> findFixedAreaIsNull();
+
+    void sub_Arae2s2FixedArea(Long id, Long[] sub_Arae2Ids);
+
+    List<SubArea> findFixedAreaIsNotNull();
+
+    void sub_AreaSetFixedAreaNull();
+
+    
 
 }
   

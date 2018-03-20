@@ -1,5 +1,7 @@
 package jin.lon.bos.service.base.impl;
 
+import java.util.List;
+
 import org.apache.commons.lang3.StringUtils;
 import org.apache.cxf.security.LoginSecurityContext;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -52,6 +54,13 @@ public class CourierServiceImpl implements CourierService {
     public Page<Courier> findAll(Specification<Courier> specification, Pageable pageable) {
           
         return dao.findAll(specification, pageable);
+    }
+
+    @Override
+    public List<Courier> findByDeltagIsNotNull() {
+          
+        // TODO Auto-generated method stub  
+        return dao.findByDeltagIsNull();
     }
     
     

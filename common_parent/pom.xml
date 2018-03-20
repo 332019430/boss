@@ -6,9 +6,9 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 	<description>统一管理依赖</description>
-	
-	
-<properties>
+
+
+	<properties>
 		<spring.version>4.2.4.RELEASE</spring.version>
 		<struts2.version>2.3.24</struts2.version>
 		<hibernate.version>5.0.7.Final</hibernate.version>
@@ -319,6 +319,21 @@
 				</exclusion>
 			</exclusions>
 		</dependency>
+		<!-- 阿里云短信依赖 -->
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-core</artifactId>
+
+			<version>3.3.1</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.aliyun</groupId>
+			<artifactId>aliyun-java-sdk-dysmsapi</artifactId>
+
+			<version>1.0.0</version>
+		</dependency>
+
 
 
 	</dependencies>
